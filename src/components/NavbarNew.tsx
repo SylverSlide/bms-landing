@@ -18,9 +18,19 @@ export default function NavbarNew() {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (open) document.body.classList.add("no-scroll");
-    else document.body.classList.remove("no-scroll");
-    return () => document.body.classList.remove("no-scroll");
+    if (open) {
+      // Bloque le scroll de la page
+      document.body.classList.add("no-scroll");
+      document.body.style.overflow = "hidden";
+    } else {
+      // Remet le scroll de la page
+      document.body.classList.remove("no-scroll");
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.classList.remove("no-scroll");
+      document.body.style.overflow = "auto";
+    };
   }, [open]);
 
   const isActive = (href: string) => {
@@ -45,8 +55,8 @@ export default function NavbarNew() {
                 <Image 
                   src="/LOGO.webp" 
                   alt="BMS Logo" 
-                  width={40} 
-                  height={40} 
+                  width={80} 
+                  height={80} 
                   priority 
                   className="w-8 h-8"
                 />
@@ -99,16 +109,18 @@ export default function NavbarNew() {
 
       {/* Mobile menu WOW - Quiet Luxury avec animation contrôlée */}
       <div 
-        className={`fixed inset-0 z-50 md:hidden overflow-hidden transition-all duration-700 ease-out ${
+        className={`fixed inset-0 z-[9999] md:hidden overflow-y-auto transition-all duration-700 ease-out ${
           open 
             ? "opacity-100 visible" 
             : "opacity-0 invisible"
         }`}
+        style={{ 
+          minHeight: '100dvh', // Dynamic viewport height pour mobile
+          backgroundColor: 'black' // Backup au cas où
+        }}
       >
-        {/* Background avec effet de profondeur - Animation staggered */}
-        <div className={`absolute inset-0 bg-gradient-to-br from-black via-gray-950 to-black transition-all duration-1000 ease-out ${
-          open ? "scale-100" : "scale-110"
-        }`} />
+        {/* Background gradient uniforme qui COUVRE TOUT */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-black to-red-950" />
         <div className={`absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(234,46,46,0.08)_0%,transparent_50%)] transition-all duration-1200 ease-out delay-200 ${
           open ? "opacity-100" : "opacity-0"
         }`} />
@@ -138,16 +150,10 @@ export default function NavbarNew() {
               }`}
             />
           </div>
-          <h1 className={`text-2xl font-thin tracking-[0.2em] text-white mb-2 transition-all duration-600 ease-out delay-700 ${
-            open ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}>BMS</h1>
-          <div className={`w-16 h-px bg-white/20 transition-all duration-500 ease-out delay-800 ${
-            open ? "scale-x-100" : "scale-x-0"
-          }`} />
         </div>
 
         {/* Navigation révolutionnaire - Staggered animation */}
-        <div className="px-8 space-y-6">
+        <div className="px-8 py-8 space-y-6 min-h-screen flex flex-col">
           {NAV.map((item, index) => {
             const active = isActive(item.href);
             return (
@@ -198,6 +204,15 @@ export default function NavbarNew() {
               </Link>
             );
           })}
+          
+          {/* Footer signature dans le container scrollable */}
+          <div className={`text-center py-8 mt-auto transition-all duration-700 ease-out delay-1000 ${
+            open ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+          }`}>
+            <div className="text-xs text-gray-600 font-light tracking-[0.3em] uppercase">
+              B • M • S
+            </div>
+          </div>
         </div>
 
         {/* Close button - Design épuré avec animation */}
@@ -214,11 +229,6 @@ export default function NavbarNew() {
           <X size={18} className="text-white/80" />
         </button>
 
-        {/* Footer signature avec animation */}
-        <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 text-center transition-all duration-700 ease-out delay-1000 ${
-          open ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-        }`}>
-        </div>
       </div>
     </>
   );

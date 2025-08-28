@@ -38,8 +38,8 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     url: "https://bms-esports.com",
     siteName: "BMS Esports",
-    title: "BMS - Structure Esport d'Excellence",
-    description: "Structure esport d'élite dédiée à l'excellence compétitive et à l'innovation gaming.",
+    title: "BMS - Structure Esport",
+    description: "Structure esport",
     images: [
       {
         url: "/LOGO.webp",
@@ -51,8 +51,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "BMS - Structure Esport d'Excellence",
-    description: "Structure esport d'élite dédiée à l'excellence compétitive et à l'innovation gaming.",
+    title: "BMS Esports",
+    description: "Structure esport.",
     creator: "@BMSEsports",
     images: ["/LOGO.webp"],
   },

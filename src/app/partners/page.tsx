@@ -1,8 +1,59 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function PartnersPage() {
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Animation du titre principal
+    gsap.fromTo(".page-title", 
+      { y: 50, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: "power2.out",
+        delay: 0.2
+      }
+    );
+
+    // Animation de la ligne rouge - S'ÉTEND DES 2 CÔTÉS
+    gsap.fromTo(".title-underline", 
+      { width: 0, opacity: 0 },
+      {
+        width: "96px", // w-24 = 96px
+        opacity: 1,
+        duration: 1.2,
+        ease: "power2.out",
+        delay: 0.6
+      }
+    );
+
+    // Animation des cartes partenaires - STAGGER
+    gsap.fromTo(".partner-card", 
+      { y: 60, opacity: 0, rotationY: 10 },
+      {
+        y: 0,
+        opacity: 1,
+        rotationY: 0,
+        duration: 0.8,
+        ease: "power2.out",
+        stagger: 0.1, // Effet cascade
+        scrollTrigger: {
+          trigger: ".partners-grid",
+          start: "top 70%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+
+  }, []);
+
   return (
     <div className="bg-black text-white min-h-screen">
       
@@ -10,10 +61,10 @@ export default function PartnersPage() {
       <section className="relative py-32 bg-gradient-to-br from-gray-900 via-black to-blue-900">
         <div className="relative z-10 max-w-7xl mx-auto px-4">
           <div className="text-center">
-            <h1 className="text-8xl font-black text-white mb-8 tracking-tight">
+            <h1 className="page-title text-8xl font-black text-white mb-8 tracking-tight opacity-0">
               PARTNERS
             </h1>
-            <div className="w-24 h-1 bg-brand-red mx-auto" />
+            <div className="title-underline w-24 h-1 bg-brand-red mx-auto opacity-0" />
           </div>
         </div>
       </section>
@@ -22,7 +73,7 @@ export default function PartnersPage() {
       <section className="py-32 bg-white text-black">
         <div className="max-w-6xl mx-auto px-4">
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+          <div className="partners-grid grid md:grid-cols-2 lg:grid-cols-3 gap-12">
             {[
               { name: "RAZER", type: "Gaming Gear" },
               { name: "NIKE", type: "Apparel" },
@@ -31,7 +82,7 @@ export default function PartnersPage() {
               { name: "TWITCH", type: "Streaming" },
               { name: "DISCORD", type: "Community" }
             ].map((partner, i) => (
-              <div key={partner.name} className="relative h-[40vh]">
+              <div key={partner.name} className="partner-card relative h-[40vh] opacity-0">
                 
                 {/* Logo background */}
                 <div className="absolute top-0 left-0 w-[85%] h-[70%] z-10 bg-gray-200 rounded-lg flex items-center justify-center">

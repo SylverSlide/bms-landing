@@ -1,8 +1,59 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function ShopPage() {
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Animation du titre principal
+    gsap.fromTo(".page-title", 
+      { y: 50, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: "power2.out",
+        delay: 0.2
+      }
+    );
+
+    // Animation de la ligne rouge - S'ÉTEND DES 2 CÔTÉS
+    gsap.fromTo(".title-underline", 
+      { width: 0, opacity: 0 },
+      {
+        width: "96px", // w-24 = 96px
+        opacity: 1,
+        duration: 1.2,
+        ease: "power2.out",
+        delay: 0.6
+      }
+    );
+
+    // Animation des cartes produits - STAGGER
+    gsap.fromTo(".product-card", 
+      { y: 80, opacity: 0, scale: 0.9 },
+      {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        ease: "power2.out",
+        stagger: 0.12, // Plus rapide pour les produits
+        scrollTrigger: {
+          trigger: ".products-grid",
+          start: "top 70%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+
+  }, []);
+
   return (
     <div className="bg-black text-white min-h-screen">
       
@@ -11,10 +62,10 @@ export default function ShopPage() {
         
         <div className="relative z-10 max-w-7xl mx-auto px-4">
           <div className="text-center">
-            <h1 className="text-8xl font-black text-white mb-8 tracking-tight">
+            <h1 className="page-title text-8xl font-black text-white mb-8 tracking-tight opacity-0">
               SHOP
             </h1>
-            <div className="w-24 h-1 bg-brand-red mx-auto" />
+            <div className="title-underline w-24 h-1 bg-brand-red mx-auto opacity-0" />
           </div>
         </div>
       </section>
@@ -24,7 +75,7 @@ export default function ShopPage() {
         <div className="max-w-7xl mx-auto px-4">
           
           {/* Grid produits avec effet 3D */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+          <div className="products-grid grid md:grid-cols-2 lg:grid-cols-3 gap-12">
             {[
               { name: "JERSEY", price: "€89" },
               { name: "HOODIE", price: "€119" },
@@ -33,7 +84,7 @@ export default function ShopPage() {
               { name: "ACCESSORIES", price: "€29" },
               { name: "LIMITED", price: "€199" }
             ].map((product, i) => (
-              <div key={product.name} className="relative h-[60vh] group">
+              <div key={product.name} className="product-card relative h-[60vh] group opacity-0">
                 
                 {/* Image produit de fond */}
                 <div className="absolute top-0 left-0 w-[90%] h-[75%] z-10">

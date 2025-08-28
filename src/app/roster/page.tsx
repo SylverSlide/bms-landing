@@ -1,8 +1,58 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function RosterPage() {
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Animation du titre principal
+    gsap.fromTo(".page-title", 
+      { y: 50, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: "power2.out",
+        delay: 0.2
+      }
+    );
+
+    // Animation de la ligne rouge - S'ÉTEND DES 2 CÔTÉS
+    gsap.fromTo(".title-underline", 
+      { width: 0, opacity: 0 },
+      {
+        width: "96px", // w-24 = 96px
+        opacity: 1,
+        duration: 1.2,
+        ease: "power2.out",
+        delay: 0.6
+      }
+    );
+
+    // Animation des cartes joueurs - STAGGER
+    gsap.fromTo(".player-card", 
+      { y: 80, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.out",
+        stagger: 0.15, // Décalage entre chaque carte
+        scrollTrigger: {
+          trigger: ".players-grid",
+          start: "top 70%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+
+  }, []);
+
   return (
     <div className="bg-black text-white min-h-screen">
       
@@ -19,10 +69,10 @@ export default function RosterPage() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4">
           <div className="text-center">
-            <h1 className="text-8xl font-black text-white mb-8 tracking-tight">
+            <h1 className="page-title text-8xl font-black text-white mb-8 tracking-tight opacity-0">
               ROSTER
             </h1>
-            <div className="w-24 h-1 bg-brand-red mx-auto" />
+            <div className="title-underline w-24 h-1 bg-brand-red mx-auto opacity-0" />
           </div>
         </div>
       </section>
@@ -32,7 +82,7 @@ export default function RosterPage() {
         <div className="max-w-7xl mx-auto px-4">
           
           {/* Grid de joueurs avec effet 3D - VRAIS JOUEURS */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="players-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               { name: "Ogey", realName: "Rayane Noubli", main: "Captain Falcon", country: "🇫🇷", joinDate: "2021" },
               { name: "crêpe salée", realName: "Laurent Vorburger", main: "Steve/Wario", country: "🇫🇷", joinDate: "2022" },
@@ -41,7 +91,7 @@ export default function RosterPage() {
               { name: "Vic", realName: "Victor Madubost", main: "Yoshi", country: "🇫🇷", joinDate: "2024" },
               { name: "Dizio", realName: "Adil Aiachine", main: "Fox", country: "🇫🇷", joinDate: "2024" }
             ].map((player, index) => (
-              <div key={player.name} className="relative h-[50vh] group">
+              <div key={player.name} className="player-card relative h-[50vh] group opacity-0">
                 
                 {/* Image de fond */}
                 <div className="absolute top-0 left-0 w-[85%] h-[80%] z-10">

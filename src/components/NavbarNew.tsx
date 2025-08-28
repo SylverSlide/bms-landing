@@ -107,15 +107,14 @@ export default function NavbarNew() {
         </div>
       </header>
 
-      {/* Mobile menu WOW - Quiet Luxury avec animation contrôlée */}
+      {/* Mobile menu - Overlay fixe plein écran */}
       <div 
-        className={`fixed inset-0 z-[9999] md:hidden overflow-y-auto transition-all duration-700 ease-out ${
+        className={`fixed inset-0 z-[9999] md:hidden h-[100svh] overflow-hidden transition-all duration-700 ease-out ${
           open 
             ? "opacity-100 visible" 
             : "opacity-0 invisible"
         }`}
         style={{ 
-          minHeight: '100dvh', // Dynamic viewport height pour mobile
           backgroundColor: 'black' // Backup au cas où
         }}
       >
@@ -132,86 +131,93 @@ export default function NavbarNew() {
           <div className="w-full h-full bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:80px_80px]" />
         </div>
 
-        {/* Header épuré avec logo centré - Animation orchestrée */}
-        <div className={`relative flex flex-col items-center pt-16 pb-8 transition-all duration-800 ease-out delay-400 ${
-          open ? "translate-y-0 opacity-100" : "-translate-y-8 opacity-0"
-        }`}>
-          <div className="relative mb-6">
-            <div className={`absolute inset-0 bg-white/5 rounded-full blur-2xl transition-all duration-1000 ease-out delay-500 ${
-              open ? "scale-100" : "scale-0"
-            }`} />
-            <Image 
-              src="/LOGO.webp" 
-              alt="BMS Logo" 
-              width={80} 
-              height={80} 
-              className={`relative z-10 opacity-95 transition-all duration-700 ease-out delay-600 ${
-                open ? "scale-100 rotate-0" : "scale-75 rotate-12"
-              }`}
-            />
+        {/* Conteneur interne scrollable avec safe-area */}
+        <div className="h-full overflow-y-auto overscroll-contain" style={{
+          paddingTop: 'env(safe-area-inset-top)',
+          paddingBottom: 'env(safe-area-inset-bottom)'
+        }}>
+          
+          {/* Header épuré avec logo centré */}
+          <div className={`relative flex flex-col items-center pt-16 pb-8 transition-all duration-800 ease-out delay-400 ${
+            open ? "translate-y-0 opacity-100" : "-translate-y-8 opacity-0"
+          }`}>
+            <div className="relative mb-6">
+              <div className={`absolute inset-0 bg-white/5 rounded-full blur-2xl transition-all duration-1000 ease-out delay-500 ${
+                open ? "scale-100" : "scale-0"
+              }`} />
+              <Image 
+                src="/LOGO.webp" 
+                alt="BMS Logo" 
+                width={80} 
+                height={80} 
+                className={`relative z-10 opacity-95 transition-all duration-700 ease-out delay-600 ${
+                  open ? "scale-100 rotate-0" : "scale-75 rotate-12"
+                }`}
+              />
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <div className="px-8 space-y-6 flex-1">
+            {NAV.map((item, index) => {
+              const active = isActive(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={`group w-full relative block transition-all duration-600 ease-out ${
+                    open 
+                      ? "translate-x-0 opacity-100" 
+                      : "translate-x-8 opacity-0"
+                  }`}
+                  style={{ 
+                    transitionDelay: open ? `${900 + (index * 100)}ms` : '0ms'
+                  }}
+                >
+                  <div className={`absolute inset-0 rounded-2xl transition-all duration-500 ${
+                    active
+                      ? "bg-gradient-to-r from-brand-red/10 to-transparent border border-brand-red/20"
+                      : "bg-white/[0.02] border border-white/5 group-hover:border-white/10"
+                  }`} />
+                  <div className="relative p-6 flex items-center gap-4">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                      active
+                        ? "bg-brand-red/20 shadow-[0_0_20px_rgba(234,46,46,0.3)]"
+                        : "bg-white/5 group-hover:bg-white/10"
+                    }`}>
+                      <div className={`transition-all duration-300 ${
+                        active ? "text-brand-red scale-110" : "text-white/60 group-hover:text-white/80"
+                      }`}>
+                        {item.icon}
+                      </div>
+                    </div>
+                    <div className="text-left">
+                      <div className={`font-light text-lg tracking-wide transition-colors duration-300 ${
+                        active ? "text-white" : "text-gray-300 group-hover:text-white"
+                      }`}>
+                        {item.label}
+                      </div>
+                      <div className="text-xs text-gray-500 font-light tracking-wider">
+                        {item.href === '/accueil' && 'Home'}
+                        {item.href === '/roster' && 'Team'}
+                        {item.href === '/shop' && 'Collection'}
+                        {item.href === '/partners' && 'Partners'}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
 
-        {/* Navigation révolutionnaire - Staggered animation */}
-        <div className="px-8 py-8 space-y-6 min-h-screen flex flex-col">
-          {NAV.map((item, index) => {
-            const active = isActive(item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className={`group w-full relative block transition-all duration-600 ease-out ${
-                  open 
-                    ? "translate-x-0 opacity-100" 
-                    : "translate-x-8 opacity-0"
-                }`}
-                style={{ 
-                  transitionDelay: open ? `${900 + (index * 100)}ms` : '0ms'
-                }}
-              >
-                <div className={`absolute inset-0 rounded-2xl transition-all duration-500 ${
-                  active
-                    ? "bg-gradient-to-r from-brand-red/10 to-transparent border border-brand-red/20"
-                    : "bg-white/[0.02] border border-white/5 group-hover:border-white/10"
-                }`} />
-                <div className="relative p-6 flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                    active
-                      ? "bg-brand-red/20 shadow-[0_0_20px_rgba(234,46,46,0.3)]"
-                      : "bg-white/5 group-hover:bg-white/10"
-                  }`}>
-                    <div className={`transition-all duration-300 ${
-                      active ? "text-brand-red scale-110" : "text-white/60 group-hover:text-white/80"
-                    }`}>
-                      {item.icon}
-                    </div>
-                  </div>
-                  <div className="text-left">
-                    <div className={`font-light text-lg tracking-wide transition-colors duration-300 ${
-                      active ? "text-white" : "text-gray-300 group-hover:text-white"
-                    }`}>
-                      {item.label}
-                    </div>
-                    <div className="text-xs text-gray-500 font-light tracking-wider">
-                      {item.href === '/accueil' && 'Home'}
-                      {item.href === '/roster' && 'Team'}
-                      {item.href === '/shop' && 'Collection'}
-                      {item.href === '/partners' && 'Partners'}
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
-          
-          {/* Footer signature dans le container scrollable */}
-          <div className={`text-center py-8 mt-auto transition-all duration-700 ease-out delay-1000 ${
-            open ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-          }`}>
-            <div className="text-xs text-gray-600 font-light tracking-[0.3em] uppercase">
-              B • M • S
-            </div>
+        {/* Footer FIXE dans le gradient rouge */}
+        <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 text-center transition-all duration-700 ease-out delay-1000 ${
+          open ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+        }`} style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+          <div className="text-sm text-white/90 font-light tracking-[0.3em] uppercase">
+            B • M • S
           </div>
         </div>
 

@@ -218,9 +218,6 @@ export default function NavbarNew() {
         <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 text-center transition-all duration-700 ease-out delay-1000 ${
           open ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
         }`}>
-          <div className="text-xs text-gray-600 font-light tracking-[0.3em] uppercase">
-            Excellence • Innovation • Victory
-          </div>
         </div>
       </div>
     </>

@@ -83,6 +83,33 @@ export default function AccueilPage() {
         }
       );
 
+              // Logo shield mobile - Apparition douce (pas cringe)
+        gsap.fromTo(".mobile-shield", 
+          { 
+            opacity: 0,
+            y: 20 // Très léger mouvement vertical
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power1.out", // Plus doux que power2
+            delay: 0.3 // Petit délai après l'arrivée sur la page
+          }
+        );
+
+        // Parallax mobile shield au scroll
+        gsap.to(".mobile-shield", {
+          yPercent: -6,       // très léger
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".section-conteneur", // parent de l'image
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 0.2      // fluidifie sans être bouncy
+          }
+        });
+
       // Animation des soulignements au scroll - SÉPARÉS
       gsap.fromTo(".underline-drop", 
         { width: 0 },
@@ -139,17 +166,44 @@ export default function AccueilPage() {
     <div className="bg-black text-white min-h-screen">
       
       {/* Hero Section - Image responsive */}
-      <section className="bg-black py-4 sm:py-6 lg:py-8">
-        <div className="max-w-7xl mx-auto px-4">
-          <Image 
-            src="/bms_esports_cover.jpg" 
-            alt="BMS Esports Cover" 
-            width={800}
-            height={200}
-            quality={100}
-            className="w-full h-auto max-w-none"
-          />
+      <section className="bg-black">
+        
+        {/* Image Desktop - Horizontale */}
+        <div className="hidden sm:block py-4 sm:py-6 lg:py-8">
+          <div className="max-w-7xl mx-auto px-4">
+            <Image 
+              src="/bms_esports_cover.jpg" 
+              alt="BMS Esports Cover" 
+              width={800}
+              height={200}
+              quality={100}
+              className="w-full h-auto"
+            />
+          </div>
         </div>
+
+        {/* Image Mobile - Logo BMS Shield */}
+        <div className="block sm:hidden py-12 section-conteneur">
+          <div className="max-w-sm mx-auto px-4">
+            <div className="relative">
+              {/* Background pour faire ressortir le logo */}
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black rounded-2xl" />
+              
+              {/* Logo BMS Shield avec animation */}
+              <div className="relative p-8 flex items-center justify-center">
+                <Image 
+                  src="/bms_mobile.jpg" 
+                  alt="BMS Shield Logo" 
+                  width={300}
+                  height={300}
+                  quality={100}
+                  className="mobile-shield w-full h-auto max-w-[280px] opacity-0"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
       </section>
 
       {/* Section Collection - EFFET 3D LAYERING */}
